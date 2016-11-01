@@ -50,8 +50,19 @@
 ; Your goal is to write the score method.
 
 (defun score (dice)
-  ; You need to write this method
-)
+  "this is a recursive function that can probably be improved
+   specially the part of the counts >= 3 but it works for now."
+  (cond
+    ((equal dice nil) 0)
+    ((>= (count 1 dice) 3) (+ 1000 (score (remove 1 dice :count 3))))
+    ((>= (count 6 dice) 3) (+ 600 (score (remove 6 dice :count 3))))
+    ((>= (count 5 dice) 3) (+ 500 (score (remove 5 dice :count 3))))
+    ((>= (count 4 dice) 3) (+ 400 (score (remove 4 dice :count 3))))
+    ((>= (count 3 dice) 3) (+ 300 (score (remove 3 dice :count 3))))
+    ((>= (count 2 dice) 3) (+ 200 (score (remove 2 dice :count 3))))
+    ((= (car dice) 1) (+ 100 (score (cdr dice))))
+    ((= (car dice) 5) (+ 50 (score (cdr dice))))
+    (t (score (cdr dice)))))
 
 (define-test test-score-of-an-empty-list-is-zero
     (assert-equal 0 (score nil)))
