@@ -22,23 +22,29 @@
 
 ;;  YOU WRITE THIS PART:
 (defclass dice-set ()
-  () ;; WRITE DICE-SET CLASS BODY HERE
+  ((values :reader get-values :initform '()))
 )
 
 (defmethod get-values ((object dice-set))
-  ;; WRITE GET-VALUES METHOD DEFINITION HERE
-)
+  (slot-value object 'values))
+
+(defmethod clear ((object dice-set))
+  (setf (slot-value object 'values) '()))
 
 (defmethod roll (how-many (object dice-set))
-  ;; WRITE ROLL METHOD DEFINITION HERE
-)
-
+  (clear object)
+  (dotimes (i how-many)
+    (push (+ 1 (random 6)) (slot-value object 'values)))
+  (get-values object))
 
 (define-test test-create-dice-set
 ;; tests making an instance of the dice-set
     (let ((dice (make-instance 'dice-set)))
       (assert-true dice)))
 
+(let ((dice (make-instance 'dice-set)))
+  (roll 10 dice)
+  (get-values dice))
 
 (define-test test-rolling-the-dice-returns-a-set-of-integers-between-1-and-6
 ;; tests rolling the dice
